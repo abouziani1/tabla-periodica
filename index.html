@@ -271,20 +271,24 @@ setup();
 <script>
   async function registrarVisita() {
     try {
-      // Obtenemos la IP pública del visitante
-      let ipResponse = await fetch('https://api64.ipify.org?format=json');
-      let ipData = await ipResponse.json();
+      // 1. Consultamos la API gratuita para obtener IP, País, Ciudad e ISP (Proveedor)
+      let response = await fetch('https://ipapi.co/json/');
+      let data = await response.json();
       
-      // Preparamos los datos
+      // 2. Preparamos el paquete completo con todos los datos detallados
       let datosVisita = {
-        ip: ipData.ip,
-        navegador: navigator.userAgent
+        ip: data.ip || "Desconocida",
+        pais: data.country_name || "Desconocido",
+        ciudad: data.city || "Desconocida",
+        isp: data.org || "Desconocido", // Proveedor de Internet (ej: Movistar, Vodafone, etc.)
+        navegador: navigator.userAgent,
+        pagina: window.location.href
       };
 
-      // Tu URL de Google Apps Script ya integrada
+      // 3. Tu URL de Google Apps Script (la misma de siempre)
       let urlScript = "https://script.google.com/macros/s/AKfycbzf5WB3VRxRnDxZ9IVMWRzwCkfqeVO9SwBD0V9Z3Ydz9voMgoBA6iRalrROxkgPCCMN/exec"; 
 
-      // Enviamos el aviso de forma silenciosa
+      // 4. Enviamos el aviso de forma silenciosa al servidor de Google
       await fetch(urlScript, {
         method: "POST",
         mode: "no-cors",
