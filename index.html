@@ -267,4 +267,39 @@ function selAll(v){S.sel=new Set(v?E.map(e=>e.z):[]);selRef()}
 function addP(k){E.filter(F[k][1]).forEach(e=>S.sel.add(e.z));selRef()}
 function det(z){const e=E[z-1];document.getElementById("det").innerHTML=`<b>${e.n}</b> (${e.s}) · Z = ${e.z}<br>Estados de oxidación: ${e.o.length?e.o.join(", "):"sin datos fiables"}`}
 setup();
-</script></body></html>
+</script>
+<script>
+  async function registrarVisita() {
+    try {
+      // Obtenemos la IP pública del visitante
+      let ipResponse = await fetch('https://api64.ipify.org?format=json');
+      let ipData = await ipResponse.json();
+      
+      // Preparamos los datos
+      let datosVisita = {
+        ip: ipData.ip,
+        navegador: navigator.userAgent
+      };
+
+      // Tu URL de Google Apps Script ya integrada
+      let urlScript = "https://script.google.com/macros/s/AKfycbzf5WB3VRxRnDxZ9IVMWRzwCkfqeVO9SwBD0V9Z3Ydz9voMgoBA6iRalrROxkgPCCMN/exec"; 
+
+      // Enviamos el aviso de forma silenciosa
+      await fetch(urlScript, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(datosVisita)
+      });
+    } catch (error) {
+      console.error("Error al registrar visita:", error);
+    }
+  }
+
+  // Se ejecuta automáticamente al cargar la página
+  window.onload = registrarVisita;
+</script>
+</body>
+</html>
