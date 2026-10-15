@@ -356,14 +356,10 @@ async function registrarVisita() {
 
     await fetch(urlScript, {
       method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8"
-      },
       body: JSON.stringify(datosVisita)
     });
 
-    console.log("Solicitud de registro de visita enviada.");
+    console.log("Visita registrada correctamente.");
 
   } catch (error) {
     console.error("Error al registrar la visita:", error);
